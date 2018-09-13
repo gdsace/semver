@@ -1,6 +1,6 @@
 # Version Tagging Scripts
 
-[![Build Status](https://travis-ci.org/zephinzer/version-tagging-scripts.svg?branch=master)](https://travis-ci.org/zephinzer/version-tagging-scripts)
+[![Build Status](https://travis-ci.org/gdsace/semver.svg?branch=master)](https://travis-ci.org/gdsace/semver)
 
 This package provides scripts that helps with managing semver versioning systems using
 git tagging.
@@ -14,38 +14,6 @@ Semver versioning is:
 ```
 
 Read more on semver at: [http://semver.org/](http://semver.org/)
-
-
-
-# Installation
-
-
-
-## NPM 
-
-
-Install this locally using:
-
-```bash
-npm i vtscripts --save-dev
-```
-
-Or globally:
-
-```bash
-npm i -g vtscripts
-```
-
-
-## Git Submodule
-
-
-Use this as a `git` submodule. Install it by running the following in the root of your
-project:
-
-```
-git submodule add https://github.com/zephinzer/version-tagging-scripts <./path/to/put/it/in>
-```
 
 
 
@@ -73,25 +41,25 @@ should you not do so. The necessary hashbangs have been added and they are label
 It is possible to use the published Docker container to iterate a version. To do this, pull the image first:
 
 ```bash
-docker pull zephinzer/vtscripts:latest
+docker pull govtechsg/semver:latest
 ```
 
 Verify the iamge has been pulled from Docker Hub:
 
 ```bash
-docker images | grep vtscripts
+docker images | grep semver
 ```
 
 A single line of output should appear:
 
 ```
-zephinzer/vtscripts                    latest                                         xxxxxxxxxxxx        2 weeks ago         48.2MB
+govtechsg/semver                    latest                                         xxxxxxxxxxxx        2 weeks ago         48.2MB
 ```
 
 Run the container, binding your current directory into the container, and append the required command behind a `docker run`:
 
 ```bash
-docker run -v "$(pwd):/app" zephinzer/vtscripts:latest <COMMAND> [options]
+docker run -v "$(pwd):/app" govtechsg/semver:latest <COMMAND> [options]
 ```
 
 When calling from a container, remove the `./` prefix from the command list.
@@ -151,64 +119,6 @@ This script checks for the presence of a `git` tag that resembles `x.y.z` where
 `x` is the major version, `y` is the minor version, and `z` is the patch version.
 Should it fail to find such a git tag, it will initialize by adding a global
 `0.0.0` tag to your repository.
-
-
-
-# CI Software Integration Help
-
-
-
-## GitLab
-
-
-Install it in your dev machine with:
-
-```bash
-git submodule add https://github.com/zephinzer/version-tagging-scripts <./path/you/wanna/add/submodule/to>
-```
-
-A new file `.gitmodules` should appear. Verify that it looks like
-
-```
-[submodule './path/you/added/submodule/to']
-  path = ./path/you/added/submodule/to
-  url = https://github.com/zephinzer/version-tagging-scripts
-```
-
-We use this script with GitLab by installing this repository as a `git` submodule.
-In a `build` phase in your `scripts` property, add the following:
-
-```yaml
-...
-  stage: build
-...
-  artifacts:
-    path:
-      - ./path/you/added/submodule/to
-...
-  scripts:
-    - git submodule deinit -f .
-    - git submodule init
-    - git submodule update --init
-    - git submodule sync
-    - ...
-...
-```
-
-Note that using the `ssh://` version for this repo when adding the submodule **WILL NOT WORK**
-and will corrupt whichever runner it runs on.
-
-Incase you corrupt a runner, you'll need to access the directory containing your 
-project builds and manually run `deinit` and change the `.gitmodules` file to direct it
-to the HTTPS version of this repository. Main symptom of a corrupt runner will be during
-the fetch/clone phase of a job, you'll see some lines that look like:
-
-```
-Fetching changes...
-fatal: [../]+.git/modules/[./path/you/added/submodule/to] is not a git repository
-```
-
-Or something to that effect. No tests have been run, `before_script` has not run either.
 
 
 
