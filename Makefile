@@ -21,9 +21,11 @@ test: build.tests
 	./tests/entrypoint.sh
 
 publish: build
-	docker tag $(DOCKERREPO):latest $(DOCKERREGISTRY)/$(DOCKERREPO):latest
 	docker push $(DOCKERREPO):latest
+	docker tag $(DOCKERREPO):latest $(DOCKERREGISTRY)/$(DOCKERREPO):latest
 	docker push $(DOCKERREGISTRY)/$(DOCKERREPO):latest
+	docker tag $(DOCKERREPO):latest $(DOCKERREPO):$(shell ./get-latest)
+	docker push $(DOCKERREGISTRY)/$(DOCKERREPO):$(shell ./get-latest)
 
 get.version.alpine:
 	-@mkdir -p $(BUILD_ARTIFACTS_PATH)
